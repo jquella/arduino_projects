@@ -43,9 +43,15 @@ int stopLevel = 300;
 bool running = false;
 
 // function to turn motor on
-void startMotor() {
-  digitalWrite(ENABLE,HIGH); // full speed
-//  analogWrite(ENABLE,225); // partial speed (max=255)
+// full or partial speed
+bool full_speed = true;
+int partial_speed = 210;
+void startMotor(bool full_speed) {
+  if (full_speed) {
+    digitalWrite(ENABLE,HIGH); // full speed
+  } else {
+    analogWrite(ENABLE,partial_speed); // partial speed (max=255)
+  }
   digitalWrite(DIRA,HIGH); 
   digitalWrite(DIRB,LOW);  
 }
@@ -78,7 +84,8 @@ void loop() {
 
     // turn pump on if water below required level
     if (value < stopLevel) {
-      startMotor();
+//      full_speed=false; // in case you want to change to slower speed
+      startMotor(full_speed);
       running = true;
       Serial.println("GOGO");
     }
